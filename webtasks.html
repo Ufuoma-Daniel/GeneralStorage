@@ -1,0 +1,195 @@
+<html>
+<head> 
+</head>
+<body>
+<script = "javascript">
+//var someVariable = "testing";
+//document.write(someVariable)
+//window.alert(someVariable)
+//console.log(someVariable)
+
+var person = {
+name : "Daniel",
+age : 21,
+occupation: "Consulting Pimp"
+}
+
+var elliot = 'He said "My name is elliot"'
+
+var stringArray = ["Fizz", "Buzz", "Coconut"]
+
+
+//var requestURL = 'https://raw.githubusercontent.com/ewomackQA/JSONDataRepo/master/example.json'; 
+//var requestURL = 'https://raw.githubusercontent.com/ewomackQA/JSONDataRepo/master/kings.json';
+//var request = new XMLHttpRequest(); request.open('GET', requestURL); 
+//request.responseType = 'json';
+//request.send(); 
+
+//request.onload = function() { 
+//	var superHeroes = request.response; 
+	//console.log(superHeroes); //To display everything
+//	superHeroes.members.forEach(function(element){console.log(element);})
+	//superHeroes.forEach(function(element){console.log(element.nm);})
+//}
+
+function runJson(url, attribute){
+//var requestURL = 'https://raw.githubusercontent.com/ewomackQA/JSONDataRepo/master/example.json'; 
+//var requestURL = 'https://raw.githubusercontent.com/ewomackQA/JSONDataRepo/master/kings.json';
+var requestURL = url;
+var request = new XMLHttpRequest(); request.open('GET', requestURL); 
+request.responseType = 'json';
+request.send(); 
+
+	request.onload = function() { 
+		var superHeroes = request.response; 
+		//console.log(superHeroes); //To display everything
+		//superHeroes[attribute]
+		superHeroes[attribute].forEach(function(element){console.log(element);})
+		//superHeroes.forEach(function(element){console.log(element.nm);})
+	}
+
+}
+
+function printArray(){
+stringArray.forEach(function(element){console.log(element)})
+}
+
+function fizzBuzz(){
+	for(i=1; i<16; i++){
+	var message = i;
+	if(i%3 == 0){message = "Fizz"}
+	if(i%5 == 0){message = message + "Buzz"}
+	console.log(message); message = "";
+	}
+}
+
+function reachOne(startValue){
+console.log("Current Value:"+startValue)
+if(startValue == 1){console.log("The End")}else{
+	if(startValue%3 == 0){  reachOne(startValue/3)}
+		else{reachOne(startValue+1)  }
+		}
+}
+
+function checkAge(){
+	if(person.age >=20 && person.age <= 40){  console.log("Person is between 20 and 40") }
+	else{ console.log("HEEAATHEN, HE IS NOT OF AGE")}
+}
+
+function addToArray(newValue){
+stringArray.push(newValue);
+printArray();
+}
+
+function removeLast(){
+stringArray.splice(stringArray.length-1,1);
+printArray();
+}
+
+function displayElliott(){
+	console.log(elliot)
+}
+
+function upperCase(){
+var newString = elliot.toUpperCase()
+elliot = newString
+displayElliott()
+}
+
+function lowerCase(){
+var newString = elliot.toLowerCase()
+elliot = newString
+displayElliott()
+}
+
+function squareNumber(num){
+ return num*num 
+}
+
+function sumThreeNumbers(num1, num2, num3){
+return num1 + num2 + num3
+}
+
+function outputPerson(){
+//document.write("Person name is: " + person.name + "     ")
+//document.write("Person age is: " + person.age + "     ")
+//document.write("Person occupation is: " + person.occupation + "     ")
+
+console.log("Person name is: " + person.name + "     ")
+console.log("Person age is: " + person.age + "     ")
+console.log("Person occupation is: " + person.occupation + "     ")
+
+}
+
+function updatePerson(variableName, newValue){
+	switch(variableName){
+		case 'name' : person.name = newValue;
+		break;
+		case 'age' : person.age = newValue;
+		break;
+		case 'occupation' : person.occupation = newValue;
+		break;
+		default: console.log("this should not appear")
+	}
+outputPerson();
+}
+
+function createPargraph(){
+var newP = document.createElement("p");
+newP.setAttribute("id", "newP")
+var thing = document.getElementById("other");
+thing.appendChild(newP);
+}
+
+function removeP(idName){
+var item = document.getElementById(idName);
+var thing = document.getElementById("other");
+thing.removeChild(item);
+}
+
+function appendP(idName){
+var item = document.getElementById(idName);
+var text = document.createTextNode("Testing some shizzle")
+item.appendChild(text);
+var thing = document.getElementById("other");
+thing.appendChild(item);
+}
+
+function incAge(){
+person.age += 1;
+}
+
+function test(s){
+console.log(s);
+}
+
+</script>
+
+<div id = "buttons">
+<input type = "button" onclick = "updatePerson('name', 'Jason')">Update details </input><br>
+<input type = "button" onclick = "outputPerson()">Output details </input><br>
+<input type = "button" onclick = "incAge()">Increase age</input><br>
+<input type = "button" onclick = "displayElliott()">Output Elliot </input><br>
+<input type = "button" onclick = "upperCase()">Upper Elliot </input><br>
+<input type = "button" onclick = "lowerCase()">Lower Elliot </input><br>
+<input type = "button" onclick = "printArray()">Print Array </input><br>
+<input type = "button" onclick = "addToArray('Banana')">Add to Array </input><br>
+<input type = "button" onclick = "removeLast()">Remove last from Array </input><br>
+<input type = "button" onclick = "checkAge()">Check Age </input><br>
+<input type = "button" onclick = "fizzBuzz()">Fizz Buzz </input><br>
+<input type = "button" onclick = "reachOne(442)">Reach One </input><br>
+<input type = "button" onclick = "createPargraph()">Create Paragraph </input><br>
+<input type = "button" onclick = "appendP('newP')">Append Paragraph </input><br>
+<input type = "button" onclick = "removeP('newP')">Delete Paragraph </input><br>
+<br>
+<form>
+<input type = "text" id="url" >
+<input type = "text" id="attribute" >
+<input type = "button" onclick = "runJson(url.value, attribute.value)" value = "Send"> 
+</form>
+</div>
+<div id = "other">
+<p> testing 
+</div>
+</body>
+</html>
