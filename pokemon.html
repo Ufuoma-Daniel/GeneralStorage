@@ -1,0 +1,52 @@
+<html>
+<head> 
+</head>
+<script = "javascript">
+function startBattle(atkPoke, defPoke){
+var total;
+ var splitAtk = atkPoke.split(" ");
+ var splitDef = defPoke.split(" ");
+ 
+ splitAtk.forEach(function(pType){
+var dmg = 1;
+var request = new XMLHttpRequest(); 
+request.open('GET', "http://pokeapi.co/api/v2/type/"+pType); 
+request.responseType = 'json'; 
+request.send(); 
+ 
+request.onload = function() { 
+var pokemon = request.response;
+var doubleDamage = pokemon.damage_relations.double_damage_to;
+var halfDamage = pokemon.damage_relations.half_damage_to;
+var noDamage = pokemon.damage_relations.no_damage_to;
+
+splitDef.forEach(function(dType){
+doubleDamage.forEach(function(element){ if(dType == element.name){ dmg=2;}})
+halfDamage.forEach(function(element){ if(dType == element.name){ dmg=0.5;}})
+noDamage.forEach(function(element){ if(dType == element.name){ dmg = 0;}})
+total+= dmg;
+console.log(pType+" does "+dmg+"x damage to "+dType);
+})
+ }
+})
+console.log(total);
+}
+
+
+ 
+
+</script>
+<body>
+Input two pokemon types and see the result, e.g:<br>
+grass vs fire
+<br>
+OR
+<br>
+fire flying vs electric water
+<form>
+<input type="text" id="pokeone" placeholder="Attacking Poketype(s)"><br>
+<input type="text" id="poketwo" placeholder="Defending Poketype(s)"><br>
+<input type="button" value="Battle!" onclick="startBattle(pokeone.value, poketwo.value)">
+</form>
+</body>
+</html>
