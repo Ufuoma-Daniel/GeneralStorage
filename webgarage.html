@@ -1,0 +1,87 @@
+<html>
+<head>
+</head>
+<script>
+var id = 0;
+var garage = [];
+
+function createCar(sName, sColour, sCost, sNoOfBrokenParts){
+var fix = calculateCostToFix(sCost, sNoOfBrokenParts);
+if(typeof sNoOfBrokenParts !== 'undefined'){ }
+else{ //randomise num of broken parts
+}
+
+ var newCar = {
+	carId: id,
+	name: sName,
+	colour: sColour,
+	cost: "£"+sCost,
+	noOfBrokenParts: sNoOfBrokenParts,
+	costToFix: "£"+fix
+ }
+ id++;
+ addToGarage(newCar);
+}
+
+function addToGarage(addCar){
+garage.push(addCar);
+console.log("Car has been added");
+}
+
+function calculateCostToFix(cCost, bParts){
+var percentage = cCost/10;
+var fixCost = percentage * bParts;
+return fixCost;
+}
+
+function emptyGarage(){
+garage.splice(0,garage.length);
+console.log("Garage is empty")
+}
+
+function removeFromGarage(removeID){
+garage.splice(removeID,1);
+console.log("Car ID "+removeID+" has been removed")
+}
+
+function printGarage(){
+garage.forEach(function(cars){console.log(cars);})
+}
+
+function consoleParse(input){
+var splitText = input.split(" ");
+		switch(splitText[0]){
+		case 'create' : createCar(splitText[1], splitText[2], splitText[3], splitText[4]);
+		break;
+		case 'print' : printGarage();
+		break;
+		case 'empty' : emptyGarage();
+		break;
+		case 'remove' : removeFromGarage(splitText[1]);
+		break;
+		default: console.log("Unknown Command, try again.")
+	}
+
+}
+
+</script>
+<body>
+<form>
+<input type= "text" id="named" placeholder="CarName"><br>
+<input type= "text" id="colour" placeholder="Colour"><br>
+<input type= "number" id="cost" placeholder="Cost"><br>
+<input type= "number" id="noOfBrokenParts" placeholder="Number of BrokenParts"><br>
+<input type= "button" onclick="createCar(named.value,colour.value,cost.value,noOfBrokenParts.value)" value = "AddToGarage"><br>
+</form>
+
+<br>
+<input type="button" onclick="printGarage()" value="Print Garage"><br>
+<input type="button" onclick="emptyGarage()" value="Empty Garage"><br>
+<br>
+<input type="number" id="removalId" placeholder="CarId">
+<input type="button" onclick="removeFromGarage(removalId.value)" value="Remove from Garage"><br>
+<br>
+<input type="text" id="consoletext" placeholder="Console Commander">
+<input type="button" onclick="consoleParse(consoletext.value)" value="Touch it">
+</body>
+</html>
