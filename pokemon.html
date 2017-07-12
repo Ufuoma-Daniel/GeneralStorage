@@ -3,7 +3,7 @@
 </head>
 <script = "javascript">
 function startBattle(atkPoke, defPoke){
-var total;
+var total=0;
  var splitAtk = atkPoke.split(" ");
  var splitDef = defPoke.split(" ");
  
@@ -25,11 +25,15 @@ doubleDamage.forEach(function(element){ if(dType == element.name){ dmg=2;}})
 halfDamage.forEach(function(element){ if(dType == element.name){ dmg=0.5;}})
 noDamage.forEach(function(element){ if(dType == element.name){ dmg = 0;}})
 total+= dmg;
+
 console.log(pType+" does "+dmg+"x damage to "+dType);
+
 })
+console.log(atkPoke+" current total damage to "+defPoke+ " is "+total);
+
  }
 })
-console.log(total);
+
 }
 
 
@@ -37,7 +41,7 @@ console.log(total);
 
 </script>
 <body>
-Input two pokemon types and see the result, e.g:<br>
+Input two pokemon types and see the result, e.g:
 grass vs fire
 <br>
 OR
