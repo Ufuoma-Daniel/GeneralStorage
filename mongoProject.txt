@@ -1,0 +1,223 @@
+------------------------------------------------------------------------------------------------------------------------------
+Scenario 1
+------------------------------------------------------------------------------------------------------------------------------
+
+Set Up
+(1)	Use library
+(2)	db.createCollection("music")
+(3)	db.createCollection("video")
+(4)	db.createCollection("books")
+(5)	db.createCollection("users")
+
+ITEM TYPES -  books, audio CDs, DVDs, vinyl records, video tapes, cassettes, magazines, and academic papers.
+ 
+(6)Collections inserts: 
+Music Inserts
+db.music.insert({name: "Air-conditioning Song", type: "cd", availability: "rental", availabilityDate: "2017-04-19", stockAmount: 10, totalRentals: 0, artist:"Aang"})
+db.music.insert({name: "Earth-conditioning Song", type: "cassettes", availability: "rental", availabilityDate: "2017-07-19", stockAmount: 10, totalRentals: 0, artist:"Toph"})
+db.music.insert({name: "Fire-conditioning Song", type: "vinyl", cost: 5, availability: "purchase",  stockAmount: 50, totalPurchases: 0, artist:"Prince Zuko"})
+db.music.insert({name: "Water-conditioning Song", type: "cd", cost: 20, availability: "purchase", stockAmount: 100, totalPurchases: 0, artist:"Katara"})
+
+Video Inserts
+db.video.insert({name: "Gone-Girl", type: "dvd", availability: "rental", availabilityDate: "2017-09-11", stockAmount: 10, totalRentals: 0, director:"David Fincher", runTime: 150})
+db.video.insert({name: "Gone-Boy", type: "dvd", cost: 20, availability: "purchase",  stockAmount: 70, totalPurchases: 0, director:"Finch Davida", runTime: 510})
+db.video.insert({name: "Jaws", type: "videoTape", availability: "rental", availabilityDate: "2017-02-25", stockAmount: 100, totalRentals: 0, director:"Scott", runTime: 90})
+db.video.insert({name: "Terminator", type: "videoTape", cost: 20, availability: "purchase", totalPurchases: 0, stockAmount: 60,  director:"David Fincher", runTime: 600})
+
+Books Inserts
+db.books.insert({name: "Gone", type: "book", availability: "rental", availabilityDate: new Date("2017-09-11"), stockAmount: 100, totalRentals: 204, author:"Michael Grant"})
+db.books.insert({name: "Dream", type: "book", cost: 200, availability: "purchase",  stockAmount: 70, totalPurchases: 44, author:"Katherine South"})
+db.books.insert({name: "The Bridge", type: "book", availability: "rental", availabilityDate: new Date("2019-12-11"), stockAmount: 40, totalRentals: 10, author:"Nora East"})
+db.books.insert({name: "Gossip", type: "magazine", cost: 60, availability: "purchase",  stockAmount: 70, totalPurchases: 60, author:"Christian Blue"})
+db.books.insert({name: "Dream", type: "magazine", availability: "rental", availabilityDate: new Date("2018-03-19"), stockAmount: 3, totalRentals: 54, author:"Some Guy"})
+db.books.insert({name: "Sports", type: "magazine", cost: 20, availability: "purchase",  stockAmount: 200, totalPurchases: 177, author:"Richard Howl"})
+db.books.insert({name: "plantlife in space", type: "academic", cost: 5, availability: "purchase",  stockAmount: 169, totalPurchases: 26, author:"Crissa Crossa"})
+db.books.insert({name: "spacelife in plant", type: "academic", availability: "rental", availabilityDate: new Date("2017-06-30"), stockAmount: 30, totalRentals: 5, author:"Crossa Crissa "})
+
+User Inserts
+db.users.insert({name: "Daniel", phoneNumber: "01928349333", email: "realdaniel@hotmail.com", rentals:[{collectionType: "book", type: "academic", name: "plantlife in space", returnDate: new Date("2017-01-01")},{collectionType: "music", type: "cd", name: "Air-conditioning Song", returnDate: new Date("2017-04-20")}]})
+db.users.insert({name: "Ryan", phoneNumber: "02939248267", email: "fakedaniel@hotmail.com", rentals:[{collectionType: "video", type: "dvd", name: "Gone-Girl", returnDate: new Date("2018-01-01")}]})
+db.users.insert({name: "Noah", phoneNumber: "01934239846", email: "chickendaniel@hotmail.com", rentals:[{collectionType: "video", type: "dvd", name: "Gone-Boy", returnDate: new Date("2018-10-10")}]})
+
+Queries:
+(1)find overdue rentals - db.users.find({"rentals.returnDate": {"$lt" : new Date()}}).pretty()
+
+(2)search by author or artist - 
+db.music.find({artist: "Aang"})
+db.video.find({director: "David Fincher"})
+db.books.find({author: "Michael Grant"})
+
+(3)search by popularity - 
+db.books.find({availability: "rental"}).sort({totalRentals: -1}).pretty()
+db.books.find({availability: "purchase"}).sort({totalPurchases: -1}).pretty()
+
+(4)search by price, in this example under £50, order in descending - db.books.find({cost: {$lt : 50}}).sort({cost: -1}).pretty()
+
+(5)search by availability (rental or purchase) - db.books.find({availability: "rental"}).pretty()
+
+(6)search by availabilityDate, (if a book is all rented out or sold out, when it will be available again) - db.books.find({},{name: 1, availabilityDate: 1}).pretty()
+
+(7)search by runTime (in this scenario less than 200 minutes) - db.video.find({runTime: {$lt : 200}}).sort({runTime: -1}).pretty()
+
+(8)search by type - db.books.find({type: "academic"}).pretty()
+
+(9)searches that have beeen ordered and limtied + searches that have been merged (in this example I am searching for books that can be purchased which are within a budget of £100. Results ordered by purchase popularity ) -
+db.books.find({availability: "purchase", cost: {$lte: 100}}).sort({totalPurchases: -1}).pretty()
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------------
+Scenario 2
+------------------------------------------------------------------------------------------------------------------------------
+
+Set Up
+(1)	Use emergency_services
+(2)	db.createCollection("staff")
+(3)	db.createCollection("logs")
+
+Staff Inserts
+db.staff.insert({name: "Daniel Daniels", employee_type: "Managing Director", email: "realdaniel@company.com})
+db.staff.insert({name: "Chloe Moretz", employee_type: "Call Manager", email: "danielswife@company.com"})
+db.staff.insert({name: "Noah Lister", employee_type: "Call Manager", email: "uninvited@company.com"})
+db.staff.insert({name: "Semaj Donb", employee_type: "Handler", email: "fake@company.com"})
+db.staff.insert({name: "Honey Pother", employee_type: "Handler", email: "fake@company.com"})
+db.staff.insert({name: "Anita Shite", employee_type: "Handler", email: "fake@company.com"})
+db.staff.insert({name: "Frank Sinatra", employee_type: "Handler", email: "fake@company.com"})
+db.staff.insert({name: "Rick Sanchez", employee_type: "Handler", email: "fake@company.com"})
+
+
+Log Inserts
+db.logs.insert({caller_name:"Abdi Sucks" , staff_name:"Rick Sanchez" , issue:"Drowning" , resolution: "Dead" , call_duration: 10 , location: "Manchester" , date: new Date("2017-03-03T08:00"), comments: "I let him drown"})
+db.logs.insert({caller_name:"Jason Bourne" , staff_name:"Rick Sanchez" , issue:"Gunshot" , resolution: "Ambulance sent", call_duration: 50 , location: "Kent" , date: new Date("2017-06-13T18:00") , comments: "Gunshot to the leg " })
+db.logs.insert({caller_name:"Morty Sanchez" , staff_name:"Rick Sanchez" , issue:"Domestic" , resolution: "Police sent" , call_duration: 400 , location: "London", date: new Date("2017-09-03T12:00") , comments: "He's my grandson, relax"  })
+db.logs.insert({caller_name:"Heather Porte" , staff_name:"Rick Sanchez" , issue:"Stabbing" , resolution: "Ambulance sent", call_duration: 10, location: "Manchester" , date: new Date("2017-12-10T20:00") , comments: "She stabbed her husband"  })
+
+db.logs.insert({caller_name:"Abdi Sucks" , staff_name:"Honey Pother" , issue:"Gunshot" , resolution: "Dead" , call_duration: 90, location: "Manchester" , date: new Date("2017-01-03T10:00") , comments:"Didn't this guy already die?"  })
+db.logs.insert({caller_name:"Danny Devito" , staff_name:"Honey Pother" , issue:"Stabbing" , resolution: "Ambulance sent" , call_duration:40 , location: "London" , date: new Date("2016-03-03T13:00") , comments: "Dropped knife"  })
+db.logs.insert({caller_name:"John Trevolta" , staff_name:"Honey Pother" , issue:"Brawl" , resolution: "Dead" , call_duration: 30 , location: "London" , date: new Date("2016-05-03T12:00") , comments: "Head injury from falling on concrete"  })
+db.logs.insert({caller_name:"Lisa Ann" , staff_name:"Honey Pother" , issue:"Missing pet" , resolution: "Redirected" , call_duration: 50, location: "Kent", date: new Date("2016-09-03T08:00") , comments: "Missing cat" })
+
+db.logs.insert({caller_name:"Abdi Sucks" , staff_name:"Frank Sinatra" , issue:"Missing pet" , resolution:"Dead" , call_duration: 10 , location:"Milton Keynes" , date: new Date("2017-01-16T12:00") , comments:"Are you immortal?" })
+db.logs.insert({caller_name:"Jim Carrey" , staff_name:"Frank Sinatra" , issue:"Fire" , resolution:"Fire Brigade sent" , call_duration: 30 , location: "Manchester", date: new Date("2017-03-20T15:00") , comments:"Toaster" })
+db.logs.insert({caller_name:"Ricardo Luiz" , staff_name:"Frank Sinatra" , issue:"Fire" , resolution:"Fire Brigade sent" , call_duration: 35, location: "Manchester", date: new Date("2017-05-04T15:00") , comments:"Toaster" })
+db.logs.insert({caller_name:"Jim Carrey" , staff_name:"Frank Sinatra" , issue:"Domestic" , resolution:"Police sent" , call_duration: 20 , location: "London" , date: new Date("2017-10-24T23:00") , comments:"N/A" })
+
+db.logs.insert({caller_name:"Abdi Sucks" , staff_name:"Semaj Donb" , issue:"Stabbing" , resolution:"Dead" , call_duration: 5 , location: "Kent" , date: new Date("2016-03-03T08:00") , comments:"NO....it's not possible" })
+db.logs.insert({caller_name:"Heather Porte" , staff_name:"Semaj Donb" , issue:"DUI" , resolution:"Police sent" , call_duration: 10 , location: "Kent" , date: new Date("2016-03-03T08:00") , comments:"Driving under influence, slightly tipsy" })
+db.logs.insert({caller_name:"Andrew Ryan" , staff_name:"Semaj Donb" , issue:"Missing pet" , resolution:"Redirected" , call_duration: 10 , location: "London" , date: new Date("2016-03-03T08:00") , comments:"N/A" })
+db.logs.insert({caller_name:"Heather Porte" , staff_name:"Semaj Donb" , issue:"Domestic" , resolution:"Police sent" , call_duration: 15 , location: "London" , date: new Date("2016-03-03T08:00") , comments:"Caught him with another woman" })
+
+db.logs.insert({caller_name:"Abdi Sucks" , staff_name:"Anita Shite" , issue:"Fire" , resolution:"Dead" , call_duration: 1 , location: "Milton Keynes" , date: new Date("2017-03-11T08:00") , comments: "Tossed into the fires of Mordor"})
+db.logs.insert({caller_name:"Jake Jakerson" , staff_name:"Anita Shite" , issue:"Missing Pet" , resolution:"Redirected" , call_duration: 50, location: "Manchester", date: new Date("2017-04-22T10:00") , comments: "Request forwarded"})
+db.logs.insert({caller_name:"Mashana Malowa" , staff_name:"Anita Shite" , issue:"Gunshot" , resolution:"Police sent" , call_duration:25 , location: "Kent" , date: new Date("2017-05-14T12:00") , comments: "Hunting accident"})
+db.logs.insert({caller_name:"Peter Parker" , staff_name:"Anita Shite" , issue:"Trapped in Rubble" , resolution:"Fire Brigade sent" , call_duration: 70, location: "London" , date: new Date("2017-06-26T11:00") , comments: "Buildsite Accident"})
+
+
+Queries:
+(1)what peak times for particular service requests -  db.logs.aggregate({$group: {_id: {hour:{$hour: "$date"}}, numOfOccurences: {$sum: 1}}}, {$sort: {_id: 1}}).pretty()
+
+(2)which member of staff has taken the most calls- db.logs.aggregate({$group: {_id: "$staff_name", averageCalls: {$sum: 1}}},{$limit: 1}).pretty()
+
+(3)max call duration in past month - db.logs.aggregate({$match: {$and: [{date: {$gte :  new Date(ISODate().getTime() - 1000 * 3600 * 24 * 30)}}, {date: {$lte :  new Date()}}]  }}, {$group: {_id: {staffName: "$staff_name", callDate: "$date"}, callTimeMax: {$max: "$call_duration"}}}, {$sort: {callTimeMax: -1}},{$limit: 1}).pretty() 
+
+(4) group by issue, order alphabetically -  db.logs.aggregate({$sort: {issue: 1}})
+
+(5) count occurences of each issue - db.logs.aggregate({$group: {_id: "$issue", numOfOccurences: {$sum: 1}}}, {$sort: {issue: 1}})
+
+(6)number of customer calls, who handles it and its resolution - db.logs.find({},{caller_name:1, staff_name:1, issue:1,  resolution:1, comments:1}).sort({caller_name:1}).pretty()
+
+(7)I want to query who is currently in the organisation - db.staff.find().pretty()
+
+(8)Average call time for each issue - db.logs.aggregate({$group: {_id : "$issue", avgCallTime: {$avg: "$call_duration"}}})
+
+(9)avg amount of time each staff has spent in calls - db.logs.aggregate({$group: {_id : "$staff_name", avgCallTime: {$avg: "$call_duration"}}})
+
+(9.5)avg amount of time each staff has spent in calls in the past quarter  - db.logs.aggregate({$match: {$and: [{date: {$gte :  new Date(ISODate().getTime() - 1000 * 3600 * 24 * 90)}}, {date: {$lte :  new Date()}}]  }},{$group: {_id : "$staff_name", avgCallTime: {$avg: "$call_duration"}}})
+
+(10)I want to query the number of emergencies for every location, ordered - db.logs.aggregate({$group: {_id : "$location", numOfEmergencies: {$sum:1}}}).pretty()
+
+(10.5)I want to query the number of emergencies for every location in the past quarter  - db.logs.aggregate({$match: {$and: [{date: {$gte :  new Date(ISODate().getTime() - 1000 * 3600 * 24 * 90)}}, {date: {$lte :  new Date()}}]  }}, {$group: {_id : "$location", numOfEmergencies: {$sum:1}}}).pretty()
+
+------------------------------------------------------------------------------------------------------------------------------
+Scenario 3
+------------------------------------------------------------------------------------------------------------------------------
+
+Set Up
+(1)	Use amazon_warehouse
+(2)	db.createCollection("warehouse")
+
+Warehouse Inserts
+db.warehouse.insert({item_name: "Skateboard", quantity:250 , orders: [{customer_name: "Arcanine.tm", staff_name: "Rick", deliveryLocation: "Manchester" , deliveryDate: new Date("2017-06-24"), completionTime:15 , comment: "N/A"},
+																	  {customer_name: "Poliwag.ltd", staff_name: "Daniel", deliveryLocation: "Manchester" , deliveryDate: new Date("2017-05-29"), completionTime:8 , comment: "Broken tail"},
+																	  {customer_name: "Cap-Gemini", staff_name: "Lisa", deliveryLocation: "London" , deliveryDate: new Date("2017-06-11"), completionTime:10 , comment: "N/A"}
+]})
+
+db.warehouse.insert({item_name: "Health potion", quantity:90 , orders: [{customer_name: "Shaman", staff_name: "Rick", deliveryLocation: "Kent" , deliveryDate: new Date("2017-06-06"), completionTime:20 , comment: "Likes the taste"},
+																	  {customer_name: "Warrior", staff_name: "Lisa", deliveryLocation: "Kent" , deliveryDate: new Date("2017-05-30"), completionTime:7 , comment: "Going into battle"},
+																	  {customer_name: "Arcanine.tm", staff_name: "Rick", deliveryLocation: "Manchester" , deliveryDate: new Date("2017-06-15"), completionTime:9 , comment: "N/A"},
+																	  {customer_name: "Warrior", staff_name: "Daniel", deliveryLocation: "Manchester" , deliveryDate: new Date("2017-04-29"), completionTime:8 , comment: "N/A"},
+																	  {customer_name: "Cap-Gemini", staff_name: "Lisa", deliveryLocation: "London" , deliveryDate: new Date("2017-04-11"), completionTime:10 , comment: "Hoarder"}
+]})
+
+db.warehouse.insert({item_name: "Gold Stick", quantity:10 , orders: [{customer_name: "Rick Sanchez", staff_name: "Daniel", deliveryLocation: "Kent" , deliveryDate: new Date("2017-06-03"), completionTime:12 , comment: "July 30th, they return"},
+																	  {customer_name: "Bill Gates", staff_name: "Lisa", deliveryLocation: "Kent" , deliveryDate: new Date("2017-05-13"), completionTime:16 , comment: "I'm that rich"},
+																	  {customer_name: "Tony Maloney", staff_name: "Rick", deliveryLocation: "London" , deliveryDate: new Date("2017-06-17"), completionTime:19 , comment: "N/A"},
+																	  {customer_name: "Peter Pan", staff_name: "Daniel", deliveryLocation: "London" , deliveryDate: new Date("2017-06-20"), completionTime:15 , comment: "Breathes heavily"},
+																	  {customer_name: "Cap-Gemini", staff_name: "Lisa", deliveryLocation: "London" , deliveryDate: new Date("2017-06-10"), completionTime:30 , comment: "N/A"}
+]})
+
+db.warehouse.insert({item_name: "Banana", quantity:40 , orders: [{customer_name: "Bill Murray", staff_name: "Daniel", deliveryLocation: "London" , deliveryDate: new Date("2017-06-14"), completionTime:3 , comment: "N/A"},
+																	  {customer_name: "Lanky Tom", staff_name: "Lisa", deliveryLocation: "Kent" , deliveryDate: new Date("2017-06-19"), completionTime:5 , comment: "The human girafe"},
+																	  {customer_name: "John Doe", staff_name: "Rick", deliveryLocation: "Manchester" , deliveryDate: new Date("2017-06-17"), completionTime:8 , comment: "N/A"},
+																	  {customer_name: "Timmy Turner", staff_name: "Daniel", deliveryLocation: "London" , deliveryDate: new Date("2017-06-21"), completionTime:4 , comment: "Unlimited Wishes"},
+																	  {customer_name: "Zack Black", staff_name: "Lisa", deliveryLocation: "Manchester" , deliveryDate: new Date("2017-06-01"), completionTime:6 , comment: "N/A"}
+]})
+
+Queries
+(1) - I want to add multiple products to an order - ??????? Multiple inserts
+(2) - I want to query which items need restocking - db.warehouse.find({quantity: {$lt: 50}}, {item_name: 1, quantity: 1}).pretty()
+(3) - I want to query what the maximum time take to complete an order is - db.warehouse.aggregate({$group: {_id: "$item_name", maxCompletionTime: {$max: {$max:"$orders.completionTime"}}}})
+(4) - I want to query the orders to be sorted by delivery date  - db.warehouse.aggregate({$unwind: "$orders"}, {$sort: {"orders.deliveryDate": -1}}, {$group: {_id: "$item_name", orders: {$push : "$orders"}}}).pretty()
+(5) - I want to query the average time each item takes to be packed - db.warehouse.aggregate({$group: {_id: "$item_name", avgCompletionTime: {$max: {$avg:"$orders.completionTime"}}}})
+(6) - I want to be able to add products - db.warehouse.insert({item_name : "newProduct" , quantity: 10, orders: [{customer_name: "Fake", staff_name: "Realman", deliveryLocation: "Bedroom" , deliveryDate: new Date("2017-06-29"), completionTime:100 , comment: "To be removed"},]}) 
+(7) - I want to be able to update product stock numbers - db.warehouse.update({item_name: "newProduct"}, {$set: {quantity: "100"}})
+(8) - I want to be able to remove products from the database - db.warehouse.remove({item_name: "newProduct"})
+(9) - I want to be able to see how many orders have been made for each product  - Gave Up
+"" in the past month
+
+I want to be able to see the amount of orders each of our supplier have made
+"" in the past month
+
+
+mongoexport --db amazon_warehouse --collection warehouse --out warehouse.json
+
+mongoexport --db library --collection music --out librarymusic.json
+mongoexport --db library --collection video --out libraryvideo.json
+mongoexport --db library --collection books --out librarybooks.json
+mongoexport --db library --collection users --out libraryusers.json
+
+
+mongoexport --db emergency_services --collection staff --out emergencystaff.json
+mongoexport --db emergency_services --collection logs --out emergencylogs.json
+
+
+(2)	db.createCollection("music")
+(3)	db.createCollection("video")
+(4)	db.createCollection("books")
+(5)	db.createCollection("users")
+(2)	db.createCollection("staff")
+(3)	db.createCollection("logs")
+(2)	db.createCollection("warehouse")
+
+
+
+
+
+
+
+
+
+
